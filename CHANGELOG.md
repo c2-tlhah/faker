@@ -1,5 +1,29 @@
 ## Changelog
 
+### [v27.4.0 - 2024-08-21](https://github.com/joke2k/faker/compare/v27.3.0...v27.4.0)
+
+* Add person provider for `pk_PK` locale. Thanks @c2-tlhah
+
+### [v27.3.0 - 2024-08-21](https://github.com/joke2k/faker/compare/v27.2.0...v27.3.0)
+
+* Add providers for `vi_VN` locale. Thanks @ntd1683.
+
+### [v27.2.0 - 2024-08-21](https://github.com/joke2k/faker/compare/v27.1.0...v27.2.0)
+
+* Split names in `en_IN` person provider. Thanks @wh0th3h3llam1.
+
+### [v27.1.0 - 2024-08-21](https://github.com/joke2k/faker/compare/v27.0.0...v27.1.0)
+
+* Add address providoer for `en_MS` local. Thanks @carlosfunk.
+
+### [v27.0.0 - 2024-08-12](https://github.com/joke2k/faker/compare/v26.3.0...v27.0.0)
+
+* Re-introduce `part_of_speech` argument to `words()` method.
+
+### [v26.3.0 - 2024-08-08](https://github.com/joke2k/faker/compare/v26.2.0...v26.3.0)
+
+* Extend `ro_RO` company localization with prefixes. Thanks @DDSNA.
+
 ### [v26.2.0 - 2024-08-06](https://github.com/joke2k/faker/compare/v26.1.0...v26.2.0)
 
 * Add Swahili (`sw`) provider for generating Swahili names. Thanks @5uru.
