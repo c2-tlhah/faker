@@ -6,22 +6,34 @@ from unittest import mock
 
 from faker import Faker
 from faker.providers.person.ar_AA import Provider as ArProvider
+from faker.providers.person.ar_DZ import Provider as ArDZProvider
 from faker.providers.person.az_AZ import Provider as AzAzProvider
 from faker.providers.person.cs_CZ import Provider as CsCZProvider
+from faker.providers.person.de_AT import Provider as DeAtProvider
+from faker.providers.person.de_LI import Provider as DeLiProvider
 from faker.providers.person.en import Provider as EnProvider
 from faker.providers.person.en_GB import Provider as EnGBProvider
 from faker.providers.person.en_IE import Provider as EnIEProvider
 from faker.providers.person.en_IN import Provider as EnINProvider
+from faker.providers.person.en_KE import Provider as EnKEProvider
+from faker.providers.person.en_NG import Provider as EnNgProvider
 from faker.providers.person.en_PK import Provider as EnPKprovider
 from faker.providers.person.en_US import Provider as EnUSProvider
 from faker.providers.person.es import Provider as EsProvider
 from faker.providers.person.es_CO import Provider as EsCOProvider
+from faker.providers.person.es_MX import Provider as EsMXProvider
 from faker.providers.person.et_EE import Provider as EtEEProvider
 from faker.providers.person.fi_FI import Provider as FiProvider
 from faker.providers.person.fr_BE import Provider as FrBEProvider
+from faker.providers.person.fr_DZ import Provider as FrDZProvider
 from faker.providers.person.ga_IE import Provider as GaIEProvider
+from faker.providers.person.gu_IN import Provider as GuINProvider
+from faker.providers.person.ha_NG import Provider as HaNgProvider
 from faker.providers.person.he_IL import Provider as HeILProvider
+from faker.providers.person.hi_IN import Provider as HiINProvider
 from faker.providers.person.hy_AM import Provider as HyAmProvider
+from faker.providers.person.ig_NG import Provider as IgNgProvider
+from faker.providers.person.is_IS import Provider as IsISProvider
 from faker.providers.person.lv_LV import Provider as LvProvider
 from faker.providers.person.ne_NP import Provider as NeProvider
 from faker.providers.person.nl_BE import Provider as NlBEProvider
@@ -38,6 +50,7 @@ from faker.providers.person.ta_IN import Provider as TaINProvider
 from faker.providers.person.th_TH import Provider as ThThProvider
 from faker.providers.person.uk_UA import Provider as UkUAProvider
 from faker.providers.person.uk_UA import translit as UkUATranslit
+from faker.providers.person.uz_UZ import Provider as UzUzProvider
 from faker.providers.person.vi_VN import Provider as ViVNProvider
 from faker.providers.person.yo_NG import Provider as YoNGProvider
 from faker.providers.person.zh_CN import Provider as ZhCNProvider
@@ -133,6 +146,52 @@ class TestAr(unittest.TestCase):
         self.assertIsInstance(name, str)
         assert name in ArProvider.last_names
         assert name in ArProvider.last_names
+
+
+class TestArDZ(unittest.TestCase):
+
+    def setUp(self):
+        self.fake = Faker("ar_DZ")
+        self.provider = ArDZProvider
+        Faker.seed(0)
+
+    def test_general_first_name(self):
+        name = self.fake.first_name()
+        assert name
+        self.assertIsInstance(name, str)
+        assert name in self.provider.first_names
+
+    def test_female_first_name(self):
+        name = self.fake.first_name_female()
+        assert name
+        self.assertIsInstance(name, str)
+        assert name in self.provider.first_names
+        assert name in self.provider.first_names_female
+
+    def test_male_first_name(self):
+        name = self.fake.first_name_male()
+        assert name
+        self.assertIsInstance(name, str)
+        assert name in self.provider.first_names
+        assert name in self.provider.first_names_male
+
+    def test_general_last_name(self):
+        name = self.fake.last_name()
+        assert name
+        self.assertIsInstance(name, str)
+        assert name in self.provider.last_names
+
+    def test_female_last_name(self):
+        name = self.fake.last_name_female()
+        assert name
+        self.assertIsInstance(name, str)
+        assert name in self.provider.last_names
+
+    def test_male_last_name(self):
+        name = self.fake.last_name_male()
+        assert name
+        self.assertIsInstance(name, str)
+        assert name in self.provider.last_names
 
 
 class TestAzAz(unittest.TestCase):
@@ -239,6 +298,92 @@ class TestCsCZ(unittest.TestCase):
                 last_name = name_parts[2]
         assert first_name in CsCZProvider.first_names_female
         assert last_name in CsCZProvider.last_names_female
+
+
+class TestDeAt(unittest.TestCase):
+    """Tests person in the de_AT locale"""
+
+    def setUp(self):
+        self.fake = Faker("de_AT")
+        Faker.seed(0)
+
+    def test_academic_prefix(self):
+        academic_prefix = self.fake.academic_prefix()
+        assert isinstance(academic_prefix, str)
+        assert academic_prefix in DeAtProvider.academic_prefixes
+
+    def test_academic_suffix(self):
+        academic_suffix = self.fake.academic_suffix()
+        assert isinstance(academic_suffix, str)
+        assert academic_suffix in DeAtProvider.academic_suffixes
+
+    def test_first_name(self):
+        first_name = self.fake.first_name()
+        assert isinstance(first_name, str)
+        assert first_name in DeAtProvider.first_names
+
+    def test_first_name_female(self):
+        name_female = self.fake.first_name_female()
+        assert isinstance(name_female, str)
+        assert name_female in DeAtProvider.first_names_female
+
+    def test_first_name_male(self):
+        name_male = self.fake.first_name_male()
+        assert isinstance(name_male, str)
+        assert name_male in DeAtProvider.first_names_male
+
+    def test_first_name_nonbinary(self):
+        name_nonbinary = self.fake.first_name_nonbinary()
+        assert isinstance(name_nonbinary, str)
+        assert name_nonbinary in DeAtProvider.first_names
+
+    def test_last_name(self):
+        last_name = self.fake.last_name()
+        assert isinstance(last_name, str)
+        assert last_name in DeAtProvider.last_names
+
+    def test_prefix(self):
+        prefix = self.fake.prefix()
+        assert isinstance(prefix, str)
+        assert prefix in DeAtProvider.prefixes
+
+    def test_prefix_female(self):
+        prefix_female = self.fake.prefix_female()
+        assert isinstance(prefix_female, str)
+        assert prefix_female in DeAtProvider.prefixes_female
+
+    def test_prefix_male(self):
+        prefix_male = self.fake.prefix_male()
+        assert isinstance(prefix_male, str)
+        assert prefix_male in DeAtProvider.prefixes_male
+
+    def test_prefix_nonbinary(self):
+        prefix_nonbinary = self.fake.prefix_nonbinary()
+        assert isinstance(prefix_nonbinary, str)
+        assert prefix_nonbinary in DeAtProvider.prefixes
+
+
+class TestDeLi(unittest.TestCase):
+    """Tests person in the de_LI locale"""
+
+    def setUp(self):
+        self.fake = Faker("de_LI")
+        Faker.seed(0)
+
+    def test_first_name(self):
+        first_name = self.fake.first_name()
+        assert isinstance(first_name, str)
+        assert first_name in DeLiProvider.first_names
+
+    def test_first_name_female(self):
+        name_female = self.fake.first_name_female()
+        assert isinstance(name_female, str)
+        assert name_female in DeLiProvider.first_names_female
+
+    def test_first_name_male(self):
+        name_male = self.fake.first_name_male()
+        assert isinstance(name_male, str)
+        assert name_male in DeLiProvider.first_names_male
 
 
 class TestEn(unittest.TestCase):
@@ -364,8 +509,115 @@ class TestEnIN(unittest.TestCase):
         assert last_name in EnINProvider.last_names
 
 
-class TestEnPk(unittest.TestCase):
+class TestEnKE(unittest.TestCase):
+    """Test en_KE person provider"""
 
+    def setUp(self):
+        self.fake = Faker("en_KE")
+        Faker.seed(0)
+        self.provider = EnKEProvider
+
+    def test_first_name(self):
+        # General first name
+        name = self.fake.first_name()
+        self.assertIsInstance(name, str)
+        self.assertIn(name, self.provider.first_names)
+
+    def test_first_name_female(self):
+        # Female first name
+        name = self.fake.first_name_female()
+        self.assertIsInstance(name, str)
+        self.assertIn(name, self.provider.first_names)
+        self.assertIn(name, self.provider.first_names_female)
+
+    def test_first_name_male(self):
+        # Male first name
+        name = self.fake.first_name_male()
+        self.assertIsInstance(name, str)
+        self.assertIn(name, self.provider.first_names)
+        self.assertIn(name, self.provider.first_names_male)
+
+    def test_last_name(self):
+        # General last name
+        name = self.fake.last_name()
+        self.assertIsInstance(name, str)
+        self.assertIn(name, self.provider.last_names)
+
+    def test_prefixes(self):
+        # Test male prefixes
+        prefix_m = self.fake.prefix_male()
+        self.assertIn(prefix_m, self.provider.prefixes_male)
+
+        # Test female prefixes
+        prefix_f = self.fake.prefix_female()
+        self.assertIn(prefix_f, self.provider.prefixes_female)
+
+    def test_name_formats(self):
+        # Test general name format
+        name = self.fake.name()
+        self.assertIsInstance(name, str)
+        self.assertGreaterEqual(len(name.split()), 2)
+
+        # Test male name format
+        male_name = self.fake.name_male()
+        self.assertIsInstance(male_name, str)
+        self.assertGreaterEqual(len(male_name.split()), 2)
+
+        # Test female name format
+        female_name = self.fake.name_female()
+        self.assertIsInstance(female_name, str)
+        self.assertGreaterEqual(len(female_name.split()), 2)
+
+
+class TestEnNG(unittest.TestCase):
+    """Tests person in the en_NG (English - Nigeria) locale"""
+
+    def setUp(self):
+        self.fake = Faker("en_NG")
+        Faker.seed(0)
+
+    def test_name(self):
+        name = self.fake.name()
+        self.assertIsInstance(name, str)
+
+        name = self.fake.name_female()
+        self.assertIsInstance(name, str)
+
+        name = self.fake.name_male()
+        self.assertIsInstance(name, str)
+
+    def test_first_name(self):
+        name = self.fake.first_name()
+        self.assertIsInstance(name, str)
+        assert name in EnNgProvider.first_names
+
+        name = self.fake.first_name_female()
+        self.assertIsInstance(name, str)
+        assert name in EnNgProvider.first_names
+        assert name in EnNgProvider.first_names_female
+
+        name = self.fake.first_name_male()
+        self.assertIsInstance(name, str)
+        assert name in EnNgProvider.first_names
+        assert name in EnNgProvider.first_names_male
+
+    def test_last_name(self):
+        assert hasattr(EnNgProvider, "last_names")
+
+        name = self.fake.last_name()
+        self.assertIsInstance(name, str)
+        assert name in EnNgProvider.last_names
+
+        name = self.fake.last_name_female()
+        self.assertIsInstance(name, str)
+        assert name in EnNgProvider.last_names
+
+        name = self.fake.last_name_male()
+        self.assertIsInstance(name, str)
+        assert name in EnNgProvider.last_names
+
+
+class TestEnPk(unittest.TestCase):
     def setUp(self):
         """Set up the Faker instance with the Pakistani locale."""
         self.fake = Faker("en_PK")
@@ -378,6 +630,7 @@ class TestEnPk(unittest.TestCase):
     def test_last_name(self):
         """Test if the last name is from the predefined list."""
         last_name = self.fake.last_name()
+        self.assertGreater(len(last_name), 1, "Last name should have more than 1 character.")
         self.assertIn(last_name, EnPKprovider.last_names)
 
     def test_full_name(self):
@@ -392,8 +645,20 @@ class TestEnPk(unittest.TestCase):
         name = self.fake.name()
         name_parts = name.split()
         self.assertGreaterEqual(len(name_parts), 2, "Full name should have at least a first and last name.")
-        self.assertIn(name_parts[0], EnPKprovider.first_names)
-        self.assertIn(name_parts[-1], EnPKprovider.last_names)
+        if len(name_parts) == 2:
+            self.assertIn(name_parts[0], EnPKprovider.first_names)
+            self.assertIn(name_parts[-1], EnPKprovider.last_names)
+        elif len(name_parts) == 4:
+            self.assertIn(name_parts[:2], EnPKprovider.first_names)
+            self.assertIn(name_parts[2:], EnPKprovider.last_names)
+        elif len(name_parts) == 3:
+            assert (
+                " ".join(name_parts[:2]) in EnPKprovider.first_names
+                and " ".join(name_parts[2]) in EnPKprovider.last_names
+            ) or (
+                " ".join(name_parts[:1]) in EnPKprovider.first_names
+                and " ".join(name_parts[1:]) in EnPKprovider.last_names
+            ), "Either first two name parts should be in first names, or last two should be in last names."
 
 
 class TestEnUS(unittest.TestCase):
@@ -524,6 +789,59 @@ class TestEsCO(unittest.TestCase):
         prefix = self.fake.prefix_male()
         self.assertIsInstance(prefix, str)
         assert prefix in EsCOProvider.prefixes_male
+
+
+class TestEsMX(unittest.TestCase):
+    """Tests person in the es_MX locale"""
+
+    def setUp(self):
+        self.fake = Faker("es_MX")
+        Faker.seed(0)
+
+    def test_first_names(self):
+        # General first name
+        name = self.fake.first_name()
+        self.assertIsInstance(name, str)
+        assert name in EsMXProvider.first_names
+
+        # Female first name
+        name = self.fake.first_name_female()
+        self.assertIsInstance(name, str)
+        assert name in EsMXProvider.first_names
+        assert name in EsMXProvider.first_names_female
+
+        # Male first name
+        name = self.fake.first_name_male()
+        self.assertIsInstance(name, str)
+        assert name in EsMXProvider.first_names
+        assert name in EsMXProvider.first_names_male
+
+    def test_last_names(self):
+        # General last name
+        name = self.fake.last_name()
+        self.assertIsInstance(name, str)
+        assert name in EsMXProvider.last_names
+
+        # Female last name
+        name = self.fake.last_name_female()
+        self.assertIsInstance(name, str)
+        assert name in EsMXProvider.last_names
+
+        # Male last name
+        name = self.fake.last_name_male()
+        self.assertIsInstance(name, str)
+        assert name in EsMXProvider.last_names
+
+    def test_prefixes(self):
+        # Female prefix
+        prefix = self.fake.prefix_female()
+        self.assertIsInstance(prefix, str)
+        assert prefix in EsMXProvider.prefixes_female
+
+        # Male prefix
+        prefix = self.fake.prefix_male()
+        self.assertIsInstance(prefix, str)
+        assert prefix in EsMXProvider.prefixes_male
 
 
 class TestEtEE(unittest.TestCase):
@@ -698,6 +1016,52 @@ class TestFrBE(unittest.TestCase):
         assert name in self.provider.last_names
 
 
+class TestFrDZ(unittest.TestCase):
+
+    def setUp(self):
+        self.fake = Faker("fr_DZ")
+        self.provider = FrDZProvider
+        Faker.seed(0)
+
+    def test_general_first_name(self):
+        name = self.fake.first_name()
+        assert name
+        self.assertIsInstance(name, str)
+        assert name in self.provider.first_names
+
+    def test_female_first_name(self):
+        name = self.fake.first_name_female()
+        assert name
+        self.assertIsInstance(name, str)
+        assert name in self.provider.first_names
+        assert name in self.provider.first_names_female
+
+    def test_male_first_name(self):
+        name = self.fake.first_name_male()
+        assert name
+        self.assertIsInstance(name, str)
+        assert name in self.provider.first_names
+        assert name in self.provider.first_names_male
+
+    def test_general_last_name(self):
+        name = self.fake.last_name()
+        assert name
+        self.assertIsInstance(name, str)
+        assert name in self.provider.last_names
+
+    def test_female_last_name(self):
+        name = self.fake.last_name_female()
+        assert name
+        self.assertIsInstance(name, str)
+        assert name in self.provider.last_names
+
+    def test_male_last_name(self):
+        name = self.fake.last_name_male()
+        assert name
+        self.assertIsInstance(name, str)
+        assert name in self.provider.last_names
+
+
 class TestGaIE(TestEnIE):
     """Tests person in the ga-IE locale"""
 
@@ -705,6 +1069,103 @@ class TestGaIE(TestEnIE):
         self.fake = Faker("ga-ie")
         self.provider = GaIEProvider
         Faker.seed(0)
+
+
+class TestGuIN(unittest.TestCase):
+    """Tests person in the gu_IN locale"""
+
+    def setUp(self):
+        self.fake = Faker("gu_IN")
+        Faker.seed(0)
+
+    """Verify that gender specific names are set correctly"""
+
+    def test_first_name(self):
+        name = self.fake.first_name()
+        self.assertIsInstance(name, str)
+        assert name in GuINProvider.first_names
+
+    def test_first_name_male(self):
+        name = self.fake.first_name_male()
+        self.assertIsInstance(name, str)
+        assert name in GuINProvider.first_names_male
+
+    def test_first_name_female(self):
+        name = self.fake.first_name_female()
+        self.assertIsInstance(name, str)
+        assert name in GuINProvider.first_names_female
+
+    def test_last_name(self):
+        last_name = self.fake.last_name()
+        self.assertIsInstance(last_name, str)
+        assert last_name in GuINProvider.last_names
+
+    def test_name(self):
+        name = self.fake.name().split()
+        assert all(isinstance(n, str) for n in name)
+
+    def test_prefix(self):
+        prefix = self.fake.prefix()
+        self.assertIsInstance(prefix, str)
+        assert prefix in GuINProvider.prefixes
+
+    def test_prefix_female(self):
+        prefix = self.fake.prefix_female()
+        self.assertIsInstance(prefix, str)
+        assert prefix in GuINProvider.prefixes_female
+
+    def test_prefix_male(self):
+        prefix = self.fake.prefix_male()
+        self.assertIsInstance(prefix, str)
+        assert prefix in GuINProvider.prefixes_male
+
+
+class TestHaNG(unittest.TestCase):
+    """Tests person in the ha_NG (Hausa - Nigeria) locale"""
+
+    def setUp(self):
+        self.fake = Faker("ha_NG")
+        Faker.seed(0)
+
+    def test_name(self):
+        name = self.fake.name()
+        self.assertIsInstance(name, str)
+
+        name = self.fake.name_female()
+        self.assertIsInstance(name, str)
+
+        name = self.fake.name_male()
+        self.assertIsInstance(name, str)
+
+    def test_first_name(self):
+        name = self.fake.first_name()
+        self.assertIsInstance(name, str)
+        assert name in HaNgProvider.first_names
+
+        name = self.fake.first_name_female()
+        self.assertIsInstance(name, str)
+        assert name in HaNgProvider.first_names
+        assert name in HaNgProvider.first_names_female
+
+        name = self.fake.first_name_male()
+        self.assertIsInstance(name, str)
+        assert name in HaNgProvider.first_names
+        assert name in HaNgProvider.first_names_male
+
+    def test_last_name(self):
+        assert hasattr(HaNgProvider, "last_names")
+
+        name = self.fake.last_name()
+        self.assertIsInstance(name, str)
+        assert name in HaNgProvider.last_names
+
+        name = self.fake.last_name_female()
+        self.assertIsInstance(name, str)
+        assert name in HaNgProvider.last_names
+
+        name = self.fake.last_name_male()
+        self.assertIsInstance(name, str)
+        assert name in HaNgProvider.last_names
 
 
 class TestHeIL(unittest.TestCase):
@@ -729,6 +1190,54 @@ class TestHeIL(unittest.TestCase):
     def test_last_name(self):
         last_name = self.fake.last_name()
         assert last_name in HeILProvider.last_names
+
+
+class TestHiIN(unittest.TestCase):
+    """Tests person in the hi_IN locale"""
+
+    def setUp(self):
+        self.fake = Faker("hi_IN")
+        Faker.seed(0)
+
+    def test_first_name(self):
+        """Verify that gender specific names are set correctly"""
+
+        name = self.fake.first_name_male()
+        assert name in HiINProvider.first_names_male
+
+        name = self.fake.first_name_female()
+        assert name in HiINProvider.first_names_female
+
+        name = self.fake.first_name()
+        assert name in HiINProvider.first_names_male
+
+    def test_last_name(self):
+        last_name = self.fake.last_name()
+        assert last_name in HiINProvider.last_names
+
+    def test_name(self):
+        name = self.fake.name().split()
+
+        assert all(isinstance(n, str) for n in name)
+
+        prefixes = HiINProvider.prefixes_male + HiINProvider.prefixes_female + HiINProvider.prefixes
+
+        # name should always be 2-3 words. If 3, first word should be a prefix.
+        if len(name) == 3:
+            assert all(
+                [
+                    name[0] in prefixes,
+                    name[1] in HiINProvider.first_names,
+                    name[2] in HiINProvider.last_names,
+                ]
+            )
+        else:
+            assert name[0] in HiINProvider.first_names
+            if name[-1].endswith(HiINProvider.suffixes):
+                assert name[-1][:-1] in HiINProvider.last_names
+                assert name[-1][-1] in HiINProvider.suffixes
+            else:
+                assert name[-1] in HiINProvider.last_names
 
 
 class TestHyAM(unittest.TestCase):
@@ -790,6 +1299,104 @@ class TestHyAM(unittest.TestCase):
         name = self.fake.last_name_male()
         self.assertIsInstance(name, str)
         assert name in HyAmProvider.last_names
+
+
+class TestIgNG(unittest.TestCase):
+    """Tests person in the ig_NG (Igbo - Nigeria) locale"""
+
+    def setUp(self):
+        self.fake = Faker("ig_NG")
+        Faker.seed(0)
+
+    def test_name(self):
+        name = self.fake.name()
+        self.assertIsInstance(name, str)
+
+        name = self.fake.name_female()
+        self.assertIsInstance(name, str)
+
+        name = self.fake.name_male()
+        self.assertIsInstance(name, str)
+
+    def test_first_name(self):
+        name = self.fake.first_name()
+        self.assertIsInstance(name, str)
+        assert name in IgNgProvider.first_names
+
+        name = self.fake.first_name_female()
+        self.assertIsInstance(name, str)
+        assert name in IgNgProvider.first_names
+        assert name in IgNgProvider.first_names_female
+
+        name = self.fake.first_name_male()
+        self.assertIsInstance(name, str)
+        assert name in IgNgProvider.first_names
+        assert name in IgNgProvider.first_names_male
+
+    def test_last_name(self):
+        assert hasattr(IgNgProvider, "last_names")
+
+        name = self.fake.last_name()
+        self.assertIsInstance(name, str)
+        assert name in IgNgProvider.last_names
+
+        name = self.fake.last_name_female()
+        self.assertIsInstance(name, str)
+        assert name in IgNgProvider.last_names
+
+        name = self.fake.last_name_male()
+        self.assertIsInstance(name, str)
+        assert name in IgNgProvider.last_names
+
+
+class TestIsIS(unittest.TestCase):
+    """Tests person in the is_IS locale"""
+
+    def setUp(self):
+        self.fake = Faker("is_IS")
+        Faker.seed(0)
+
+    def test_first_name(self):
+        name = self.fake.first_name()
+        self.assertIsInstance(name, str)
+        assert name in IsISProvider.first_names
+
+    def test_first_name_male(self):
+        name = self.fake.first_name_male()
+        self.assertIsInstance(name, str)
+        assert name in IsISProvider.first_names_male
+
+    def test_first_name_female(self):
+        name = self.fake.first_name_female()
+        self.assertIsInstance(name, str)
+        assert name in IsISProvider.first_names_female
+
+    def test_last_name(self):
+        last_name = self.fake.last_name()
+        self.assertIsInstance(last_name, str)
+        assert last_name.endswith("son") or last_name.endswith("dóttir")
+        suffix = "son" if last_name.endswith("son") else "dóttir"
+        last_name_wo_suffix = last_name.rsplit(suffix, maxsplit=1)[0]
+        assert last_name_wo_suffix in IsISProvider.last_names_without_suffix
+
+    def test_last_name_male(self):
+        last_name = self.fake.last_name_male()
+        self.assertIsInstance(last_name, str)
+        assert last_name.endswith("son")
+        last_name_wo_suffix = last_name.rsplit("son", maxsplit=1)[0]
+        assert last_name_wo_suffix in IsISProvider.last_names_without_suffix
+
+    def test_last_name_female(self):
+        last_name = self.fake.last_name_female()
+        self.assertIsInstance(last_name, str)
+        assert last_name.endswith("dóttir")
+        last_name_wo_suffix = last_name.rsplit("dóttir", maxsplit=1)[0]
+        assert last_name_wo_suffix in IsISProvider.last_names_without_suffix
+
+    def test_middle_name(self):
+        middle_name = self.fake.middle_name()
+        self.assertIsInstance(middle_name, str)
+        assert middle_name in IsISProvider.middle_names
 
 
 class TestJaJP(unittest.TestCase):
@@ -1201,21 +1808,6 @@ class TestRuRU(unittest.TestCase):
         assert language_name in RuProvider.language_names
 
 
-class TestSvSE(unittest.TestCase):
-    def setUp(self):
-        self.fake = Faker("sv_SE")
-        Faker.seed(0)
-
-    def test_gender_first_names(self):
-        """simple test to verify that we are pulling gender specific names"""
-        name = self.fake.first_name_female()
-        assert name in SvSEProvider.first_names_female
-        name = self.fake.first_name_male()
-        assert name in SvSEProvider.first_names_male
-        name = self.fake.first_name()
-        assert name in SvSEProvider.first_names
-
-
 class TestSkSK(unittest.TestCase):
     def setUp(self):
         self.fake = Faker("sk_SK")
@@ -1260,6 +1852,21 @@ class TestSkSK(unittest.TestCase):
                 last_name = name_parts[2]
         assert first_name in SkSKProvider.first_names_female
         assert last_name in SkSKProvider.last_names_female
+
+
+class TestSvSE(unittest.TestCase):
+    def setUp(self):
+        self.fake = Faker("sv_SE")
+        Faker.seed(0)
+
+    def test_gender_first_names(self):
+        """simple test to verify that we are pulling gender specific names"""
+        name = self.fake.first_name_female()
+        assert name in SvSEProvider.first_names_female
+        name = self.fake.first_name_male()
+        assert name in SvSEProvider.first_names_male
+        name = self.fake.first_name()
+        assert name in SvSEProvider.first_names
 
 
 class TestSw(unittest.TestCase):
@@ -1397,6 +2004,26 @@ class TestUkUa(unittest.TestCase):
         self.provider = UkUAProvider
         self.translit = UkUATranslit
 
+    def test_male_first_names(self):
+        for _ in range(100):
+            res = self.fake.first_name_male()
+            assert res in self.provider.first_names_male
+
+    def test_female_first_names(self):
+        for _ in range(100):
+            res = self.fake.first_name_female()
+            assert res in self.provider.first_names_female
+
+    def test_male_last_names(self):
+        for _ in range(100):
+            res = self.fake.last_name_male()
+            assert res in self.provider.last_names_male
+
+    def test_female_last_names(self):
+        for _ in range(100):
+            res = self.fake.last_name_female()
+            assert res in self.provider.last_names_female
+
     def test_middle_names(self):
         for _ in range(100):
             res = self.fake.middle_name()
@@ -1432,15 +2059,15 @@ class TestUkUa(unittest.TestCase):
         for _ in range(10):
             res = self.fake.full_name(gender="M")
             last_name, first_name, middle_name = res.split(" ")
-            assert last_name in self.provider.last_names
+            assert last_name in self.provider.last_names_male
             assert first_name in self.provider.first_names_male
             assert middle_name in self.provider.middle_names_male
 
     def test_full_name_female(self):
-        for _ in range(10):
+        for _ in range(1000):
             res = self.fake.full_name(gender="F")
             last_name, first_name, middle_name = res.split(" ")
-            assert last_name in self.provider.last_names
+            assert last_name in self.provider.last_names_female
             assert first_name in self.provider.first_names_female
             assert middle_name in self.provider.middle_names_female
 
@@ -1456,6 +2083,33 @@ class TestUkUa(unittest.TestCase):
         res = self.fake.full_name(short=True)
         assert res.count(".") == 2
         assert res.count(" ") == 1
+
+
+class TestUzUz(unittest.TestCase):
+    def setUp(self):
+        self.fake = Faker("uz_UZ")
+        Faker.seed(0)
+        self.provider = UzUzProvider
+
+    def test_male_first_names(self):
+        for _ in range(100):
+            res = self.fake.first_name_male()
+            assert res in self.provider.first_names_male
+
+    def test_female_first_names(self):
+        for _ in range(100):
+            res = self.fake.first_name_female()
+            assert res in self.provider.first_names_female
+
+    def test_male_last_names(self):
+        for _ in range(100):
+            res = self.fake.last_name_male()
+            assert res in self.provider.last_names_male
+
+    def test_female_last_names(self):
+        for _ in range(100):
+            res = self.fake.last_name_female()
+            assert res in self.provider.last_names_female
 
 
 class TestViVn(unittest.TestCase):
@@ -1497,7 +2151,7 @@ class TestYoNG(unittest.TestCase):
 
     def test_last_name(self):
         """
-        Test the generation of Zulu last names.
+        Test the generation of yoruba last names.
         """
         # There's no gender-specific last name in Zulu.
         self.assertTrue(hasattr(YoNGProvider, "last_names_male"))
@@ -1523,7 +2177,7 @@ class TestYoNG(unittest.TestCase):
 
     def test_first_name(self):
         """
-        Test the generation of Zulu first names.
+        Test the generation of yoruba first names.
         """
         # General first name.
         name = self.fake.first_name()
@@ -1544,7 +2198,7 @@ class TestYoNG(unittest.TestCase):
 
     def test_full_name(self):
         """
-        Test the generation of full Zulu names.
+        Test the generation of full yoruba names.
         """
         # Full name.
         name = self.fake.name()
@@ -1671,13 +2325,13 @@ class TestZhTW(unittest.TestCase):
         self.assertIsInstance(name, str)
         assert name in ZhTWProvider.last_names
 
-        # Females last name.
+        # Females last name. (no gender-specific)
         name = self.fake.last_name_female()
         assert name
         self.assertIsInstance(name, str)
         assert name in ZhTWProvider.last_names
 
-        # Male last name.
+        # Male last name. (no gender-specific)
         name = self.fake.last_name_male()
         assert name
         self.assertIsInstance(name, str)
@@ -1728,9 +2382,35 @@ class TestZhTW(unittest.TestCase):
         name = self.fake.romanized_name()
         assert name
         self.assertIsInstance(name, str)
-        first_romanized_name, last_romanized_name = name.split(" ")
+        last_romanized_name, first_romanized_name = name.split(" ")  # 'WANG SHU-FEN' or 'SHU-FEN, WANG' are both okay.
+        # first_romanized_name, last_romanized_name = name.split(" ")
         assert first_romanized_name in ZhTWProvider.first_romanized_names
         assert last_romanized_name in ZhTWProvider.last_romanized_names
+
+    def test_person(self):
+        name = self.fake.name()
+        assert name
+        assert isinstance(name, str)
+
+        first_name = self.fake.first_name()
+        assert first_name
+        assert isinstance(first_name, str)
+
+        last_name = self.fake.last_name()
+        assert last_name
+        assert isinstance(last_name, str)
+
+        romanized_name = self.fake.romanized_name()
+        assert romanized_name
+        assert isinstance(romanized_name, str)
+
+        first_romanized_name = self.fake.first_romanized_name()
+        assert first_romanized_name
+        assert isinstance(first_romanized_name, str)
+
+        last_romanized_name = self.fake.last_romanized_name()
+        assert last_romanized_name
+        assert isinstance(last_romanized_name, str)
 
 
 class TestZuZa(unittest.TestCase):

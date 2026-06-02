@@ -11,7 +11,7 @@ from typing import Any, Callable, Pattern, Sequence, TypeVar
 from .config import DEFAULT_LOCALE
 from .exceptions import UniquenessException
 from .factory import Factory
-from .generator import Generator, random
+from .generator import Generator
 from .typing import SeedType
 from .utils.distribution import choices_distribution
 
@@ -114,7 +114,7 @@ class Faker:
         :return: the appropriate attribute
         """
         if attr == "seed":
-            msg = "Calling `.seed()` on instances is deprecated. " "Use the class method `Faker.seed()` instead."
+            msg = "Calling `.seed()` on instances is deprecated. Use the class method `Faker.seed()` instead."
             raise TypeError(msg)
         else:
             return super().__getattribute__(attr)
@@ -141,12 +141,14 @@ class Faker:
     def __deepcopy__(self, memodict):
         cls = self.__class__
         result = cls.__new__(cls)
-        result._locales = copy.deepcopy(self._locales)
-        result._factories = copy.deepcopy(self._factories)
-        result._factory_map = copy.deepcopy(self._factory_map)
-        result._weights = copy.deepcopy(self._weights)
-        result._unique_proxy = UniqueProxy(self)
+        memodict[id(self)] = result
+        result._locales = copy.deepcopy(self._locales, memodict)
+        result._factory_map = copy.deepcopy(self._factory_map, memodict)
+        result._factories = list(result._factory_map.values())
+        result._weights = copy.deepcopy(self._weights, memodict)
+        result._unique_proxy = UniqueProxy(result)
         result._unique_proxy._seen = {k: {result._unique_proxy._sentinel} for k in self._unique_proxy._seen.keys()}
+        result._optional_proxy = OptionalProxy(result)
         return result
 
     def __setstate__(self, state: Any) -> None:
@@ -183,10 +185,10 @@ class Faker:
         return factory
 
     def _select_factory_distribution(self, factories, weights):
-        return choices_distribution(factories, weights, random, length=1)[0]
+        return choices_distribution(factories, weights, self.factories[0].random, length=1)[0]
 
     def _select_factory_choice(self, factories):
-        return random.choice(factories)
+        return self._factories[0].random.choice(factories)
 
     def _map_provider_method(self, method_name: str) -> tuple[list[Factory], list[float] | None]:
         """
@@ -297,13 +299,42 @@ class Faker:
 
 
 class UniqueProxy:
-    def __init__(self, proxy: Faker):
+    def __init__(self, proxy: Faker, excluded_types: tuple[type, ...] = ()):
         self._proxy = proxy
         self._seen: dict = {}
         self._sentinel = object()
+        self._excluded_types = excluded_types
 
     def clear(self) -> None:
         self._seen = {}
+
+    def exclude_types(self, types: list[type]) -> UniqueProxy:
+        """Return new UniqueProxy excluding specified types from uniqueness checks.
+
+        Args:
+            types: List of types to exclude from uniqueness enforcement
+
+        Returns:
+            New UniqueProxy instance with excluded types configured
+
+        Example:
+            >>> fake = Faker()
+            >>> # Bools won't enforce uniqueness, but other types will
+            >>> proxy = fake.unique.exclude_types([bool])
+            >>> proxy.pybool()  # Can return duplicates
+            >>> proxy.name()  # Still enforces uniqueness
+        """
+        new_proxy = UniqueProxy(self._proxy, tuple(types))
+        new_proxy._seen = self._seen
+        new_proxy._sentinel = self._sentinel
+        return new_proxy
+
+    def __getitem__(self, locale: str) -> UniqueProxy:
+        locale_proxy = self._proxy[locale]
+        unique_proxy = UniqueProxy(locale_proxy, self._excluded_types)
+        unique_proxy._seen = self._seen
+        unique_proxy._sentinel = self._sentinel
+        return unique_proxy
 
     def __getattr__(self, name: str) -> Any:
         obj = getattr(self._proxy, name)
@@ -322,25 +353,53 @@ class UniqueProxy:
     def __setstate__(self, state):
         self.__dict__.update(state)
 
+    def _make_hashable(self, value: Any) -> Any:
+        """Convert unhashable types (e.g., dict) to a hashable representation."""
+        if isinstance(value, dict):
+            return tuple(sorted((k, self._make_hashable(v)) for k, v in value.items()))
+        elif isinstance(value, list):
+            return tuple(self._make_hashable(v) for v in value)
+        elif isinstance(value, set):
+            return frozenset(self._make_hashable(v) for v in value)
+        return value
+
     def _wrap(self, name: str, function: Callable) -> Callable:
         @functools.wraps(function)
         def wrapper(*args, **kwargs):
-            key = (name, args, tuple(sorted(kwargs.items())))
+            # If types are excluded, call function once to check return type
+            if self._excluded_types:
+                retval = function(*args, **kwargs)
+                # Skip uniqueness check if type is excluded
+                if isinstance(retval, self._excluded_types):
+                    return retval
+                # If not excluded, continue with normal uniqueness logic
+                # but we already have a value, so we'll use it if unique
+                hashable_retval = self._make_hashable(retval)
+                key = (name, args, tuple(sorted(kwargs.items())))
+                generated = self._seen.setdefault(key, {self._sentinel})
 
-            generated = self._seen.setdefault(key, {self._sentinel})
+                # Check if this first value is unique
+                if hashable_retval not in generated:
+                    generated.add(hashable_retval)
+                    return retval
+                # Not unique, continue with normal loop below
+            else:
+                # No exclusions, use original logic
+                key = (name, args, tuple(sorted(kwargs.items())))
+                generated = self._seen.setdefault(key, {self._sentinel})
+                retval = self._sentinel
+                hashable_retval = self._make_hashable(retval)
 
-            # With use of a sentinel value rather than None, we leave
-            # None open as a valid return value.
-            retval = self._sentinel
-
+            # Original uniqueness logic (with potential first attempt already done)
             for i in range(_UNIQUE_ATTEMPTS):
-                if retval not in generated:
+                if hashable_retval not in generated:
                     break
                 retval = function(*args, **kwargs)
+                hashable_retval = self._make_hashable(retval)
             else:
                 raise UniquenessException(f"Got duplicated values after {_UNIQUE_ATTEMPTS:,} iterations.")
 
-            generated.add(retval)
+            generated.add(hashable_retval)
 
             return retval
 
